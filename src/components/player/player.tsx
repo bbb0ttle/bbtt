@@ -385,7 +385,13 @@ export function Player({ id, query }: { id: string; query: URLSearchParams }) {
       for (let i = 0; i < v.buffered.length; i++)
         if (v.buffered.start(i) <= v.currentTime && v.buffered.end(i) >= v.currentTime) setBuffered(v.buffered.end(i));
     },
-    onVolumeChange: (e: React.SyntheticEvent<HTMLVideoElement>) => setPrefs((p) => ({ ...p, volume: e.currentTarget.volume, muted: e.currentTarget.muted })),
+    onVolumeChange: (e: React.SyntheticEvent<HTMLVideoElement>) => {
+      const el = e.currentTarget;
+      if (!el) return;
+      const volume = el.volume;
+      const muted = el.muted;
+      setPrefs((p) => ({ ...p, volume, muted }));
+    },
     onRateChange: (e: React.SyntheticEvent<HTMLVideoElement>) => setSpeed(e.currentTarget.playbackRate),
     onEnded: () => {
       const b = body();
